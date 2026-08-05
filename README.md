@@ -1,17 +1,27 @@
-# Samsung Road Damage Detection Assistant
+# Road Damage Detection System
 
-## 📌 Project Overview
+An AI-powered web application for detecting road damages from images using YOLO object detection. Users can upload road images, detect damages such as cracks and potholes, and store reports for future reference.
 
-This project is being developed as a Samsung Capstone Project.
+> Developed as a Samsung Capstone Project.
 
-The goal is to detect road damages such as potholes and cracks using YOLO and generate an AI-powered inspection report using Google's Gemini API.
+---
 
-## 🚀 Tech Stack
+## Features
 
-### AI & Machine Learning
+- Detect road damages from uploaded images
+- Support for multiple damage types
+- Display annotated detection results
+- Store reports in MongoDB
+- View previously reported damages
+- Interactive web interface built with Streamlit
 
-- YOLO11
-- Gemini API
+---
+
+## Tech Stack
+
+### Artificial Intelligence
+
+- YOLO11 (Ultralytics)
 
 ### Backend
 
@@ -21,19 +31,85 @@ The goal is to detect road damages such as potholes and cracks using YOLO and ge
 
 - OpenCV
 
-### Web Framework
+### Database
+
+- MongoDB
+
+### Frontend
 
 - Streamlit
 
-### Version Control
+### Development Tools
 
 - Git
 - GitHub
-
-### Deployment
-
-- Docker
+- Visual Studio Code
 
 ---
 
-Currently under development.
+## Project Structure
+
+```
+Road-Damage-Detection-System
+│
+├── data/
+├── models/
+├── src/
+│   ├── core/
+│   ├── config.py
+│   └── utils.py
+│
+├── storage/
+│
+├── ui/
+│   └── pages/
+│
+├── streamlit_app.py
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## Current Workflow
+
+```
+Home
+   ↓
+Upload Image
+   ↓
+Road Damage Detection
+   ↓
+Detection Results
+   ↓
+Save Report
+   ↓
+View All Reports
+```
+
+---
+
+## Road Damage Classes
+
+- Longitudinal Crack
+- Transverse Crack
+- Alligator Crack
+- Pothole
+
+---
+
+## Future Enhancements
+
+- AI-generated inspection reports
+- Interactive maps
+- Authentication
+- Road inspector dashboard
+- Report analytics
+- Email notifications
+- PDF report generation
+
+---
+
+## Status
+
+The project is currently under active development as part of the Samsung Capstone Project.
