@@ -27,3 +27,7 @@ runs/
 
 # Model weights
 *.pt
+
+# Runtime storage
+storage/uploads/
+storage/outputs/

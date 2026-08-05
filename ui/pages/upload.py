@@ -11,6 +11,9 @@ if str(SRC_PATH) not in sys.path:
 
 from config import UPLOAD_FOLDER
 from core.pipeline import Pipeline
+from core.database import Database
+from core.report_builder import ReportBuilder
+from core.pdf_generator import generate_pdf
 
 
 st.title("Upload Road Image")
@@ -46,14 +49,7 @@ if uploaded_file:
         st.image(result["annotated_image"], use_container_width=True)
 
         st.subheader("Summary")
-
-        col1, col2 = st.columns(2)
-
-        with col1:
-            st.metric("Total Damages", result["total_damages"])
-
-        with col2:
-            st.metric("Processing Time", f"{result['processing_time']} sec")
+        st.metric("Total Damages", result["total_damages"])
 
         st.subheader("Detections")
 
@@ -65,3 +61,27 @@ if uploaded_file:
             )
         else:
             st.info("No damages detected.")
+
+        st.subheader("AI Inspection Report")
+        st.write(result["ai_report"])
+
+        db = Database()
+
+        report = ReportBuilder.build(
+            detection_result=result,
+            report_number=db.get_next_report_number(),
+            ai_report=result["ai_report"]
+        )
+
+        db.save_report(report)
+
+        st.toast("Report saved successfully.", icon="✅")
+
+        pdf_bytes = generate_pdf(report)
+        st.download_button(
+            label="Download PDF Report",
+            data=pdf_bytes,
+            file_name=f"{report['report_number']}.pdf",
+            mime="application/pdf",
+            use_container_width=True
+        )

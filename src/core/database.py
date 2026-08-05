@@ -41,3 +41,13 @@ class Database:
         logger.info(f"Fetching report: {report_id}")
 
         return self.collection.find_one({"report_id": report_id})
+
+    def get_all_reports(self):
+
+        logger.info("Fetching all reports")
+
+        return list(self.collection.find().sort("created_at", -1))
+
+    def get_next_report_number(self):
+
+        return self.collection.count_documents({}) + 1

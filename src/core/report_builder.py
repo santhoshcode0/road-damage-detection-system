@@ -7,6 +7,7 @@ class ReportBuilder:
     @staticmethod
     def build(
         detection_result,
+        report_number,
         citizen_id=None,
         latitude=None,
         longitude=None,
@@ -16,6 +17,7 @@ class ReportBuilder:
 
         return {
             "report_id": str(uuid4()),
+            "report_number": f"REP-{report_number:04d}",
             "created_at": datetime.now().isoformat(),
             "status": "Pending",
             "citizen_id": citizen_id,
