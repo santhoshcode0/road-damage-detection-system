@@ -1,6 +1,6 @@
 # Road Damage Detection System
 
-An AI-powered web application for detecting road damages from images using YOLO object detection. Users can upload road images, detect damages such as cracks and potholes, and store reports for future reference.
+An AI-powered web application for detecting road damages from images using YOLO object detection, generating AI-written inspection reports with Google Gemini, and exporting them as downloadable PDFs. Users can upload road images, detect damages such as cracks and potholes, and store reports for future reference.
 
 > Developed as a Samsung Capstone Project.
 
@@ -11,6 +11,8 @@ An AI-powered web application for detecting road damages from images using YOLO 
 - Detect road damages from uploaded images
 - Support for multiple damage types
 - Display annotated detection results
+- AI-generated inspection reports using Google Gemini
+- Export inspection reports as downloadable PDFs
 - Store reports in MongoDB
 - View previously reported damages
 - Interactive web interface built with Streamlit
@@ -21,7 +23,8 @@ An AI-powered web application for detecting road damages from images using YOLO 
 
 ### Artificial Intelligence
 
-- YOLO11 (Ultralytics)
+- YOLO11 (Ultralytics) — road damage detection
+- Google Gemini API — AI-generated inspection reports
 
 ### Backend
 
@@ -34,6 +37,10 @@ An AI-powered web application for detecting road damages from images using YOLO 
 ### Database
 
 - MongoDB
+
+### Document Generation
+
+- ReportLab (PDF export)
 
 ### Frontend
 
@@ -48,68 +55,3 @@ An AI-powered web application for detecting road damages from images using YOLO 
 ---
 
 ## Project Structure
-
-```
-Road-Damage-Detection-System
-│
-├── data/
-├── models/
-├── src/
-│   ├── core/
-│   ├── config.py
-│   └── utils.py
-│
-├── storage/
-│
-├── ui/
-│   └── pages/
-│
-├── streamlit_app.py
-├── requirements.txt
-└── README.md
-```
-
----
-
-## Current Workflow
-
-```
-Home
-   ↓
-Upload Image
-   ↓
-Road Damage Detection
-   ↓
-Detection Results
-   ↓
-Save Report
-   ↓
-View All Reports
-```
-
----
-
-## Road Damage Classes
-
-- Longitudinal Crack
-- Transverse Crack
-- Alligator Crack
-- Pothole
-
----
-
-## Future Enhancements
-
-- AI-generated inspection reports
-- Interactive maps
-- Authentication
-- Road inspector dashboard
-- Report analytics
-- Email notifications
-- PDF report generation
-
----
-
-## Status
-
-The project is currently under active development as part of the Samsung Capstone Project.
