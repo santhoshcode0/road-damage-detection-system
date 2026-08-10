@@ -17,12 +17,13 @@ class Detector:
 
         results = self.model.predict(
             source=str(image_path),
-            conf=CONFIDENCE_THRESHOLD,
-            save=True,
-            project=str(OUTPUT_FOLDER),
-            name="annotated",
-            exist_ok=True,
-            verbose=False
+        conf=CONFIDENCE_THRESHOLD,
+        save=True,
+        project=str(OUTPUT_FOLDER),
+        name="annotated",
+        exist_ok=True,
+        verbose=False,
+        show_conf=False
         )
 
         detections = []

@@ -1,0 +1,44 @@
+.block-container {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  max-width: 1400px;
+}
+
+h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+h2 {
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+div[data-testid="stMetric"] {
+  background-color: #262730;
+  border: 1px solid #3b3d4a;
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.stButton > button {
+  width: 100%;
+  height: 48px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+div[data-testid="stImage"] img {
+  border-radius: 12px;
+}
+
+div[data-testid="stDataFrame"] {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+hr {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}

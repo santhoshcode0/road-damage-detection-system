@@ -2,18 +2,18 @@ from ultralytics import YOLO
 
 
 def main():
-    model = YOLO("models/trained/run_02/last.pt")
+    model = YOLO("models/trained/run_03/last.pt")
 
     model.train(
         data="data/RDD_SPLIT/data.yaml",
-        epochs=20,
-        imgsz=640,
+        epochs=40,
+        imgsz=960,
         batch=4,
         project="models/trained",
-        name="run_03",
+        name="run_04",
         device=0,
         workers=0,
-        patience=5
+        patience=10
     )
 
     print("Training completed!")

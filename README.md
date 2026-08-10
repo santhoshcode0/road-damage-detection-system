@@ -1,57 +1,70 @@
-# Road Damage Detection System
-
-An AI-powered web application for detecting road damages from images using YOLO object detection, generating AI-written inspection reports with Google Gemini, and exporting them as downloadable PDFs. Users can upload road images, detect damages such as cracks and potholes, and store reports for future reference.
-
-> Developed as a Samsung Capstone Project.
+<p align="center">
+  <img src="ui/assets/logo_with_tagline.png" width="700">
+</p>
 
 ---
 
-## Features
+## Samsung Capstone Project
 
-- Detect road damages from uploaded images
-- Support for multiple damage types
-- Display annotated detection results
-- AI-generated inspection reports using Google Gemini
-- Export inspection reports as downloadable PDFs
-- Store reports in MongoDB
-- View previously reported damages
-- Interactive web interface built with Streamlit
+StreetScan is an AI-powered road inspection platform developed as part of the Samsung Capstone Project.
+
+The application uses a custom-trained YOLO11 model to detect road damages such as potholes and pavement cracks from uploaded road images. After detection, Google Gemini generates a human-readable inspection report, which is stored along with the detection results for future reference.
+
+The platform is designed to provide a simple workflow:
+
+- Upload a road image
+- Detect road damage using YOLO11
+- Generate an AI inspection report
+- Save reports to MongoDB
+- View previous inspections
+- Export reports as PDF documents
 
 ---
 
-## Tech Stack
+## Technology Stack
 
 ### Artificial Intelligence
 
-- YOLO11 (Ultralytics) — road damage detection
-- Google Gemini API — AI-generated inspection reports
+- YOLO11
+- Google Gemini
 
 ### Backend
 
 - Python
 
-### Computer Vision
-
-- OpenCV
-
 ### Database
 
 - MongoDB
 
-### Document Generation
+### Computer Vision
 
-- ReportLab (PDF export)
+- OpenCV
 
-### Frontend
+### Web Application
 
 - Streamlit
 
-### Development Tools
+### PDF Generation
+
+- ReportLab
+
+### Version Control
 
 - Git
 - GitHub
-- Visual Studio Code
 
 ---
 
-## Project Structure
+## Current Features
+
+- Road damage detection
+- AI-generated inspection reports
+- Report history
+- PDF export
+- Dark-themed dashboard
+
+---
+
+## Project Status
+
+Currently under active development.
