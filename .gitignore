@@ -38,8 +38,11 @@ ENV/
 # YOLO / Training Outputs
 # ==========================================
 
-runs/
-models/trained/
+runs/*
+!runs/detect/
+!runs/detect/models/
+!runs/detect/models/production/
+!runs/detect/models/production/best.pt
 
 
 # ==========================================
