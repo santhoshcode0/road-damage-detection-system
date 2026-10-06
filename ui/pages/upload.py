@@ -6,6 +6,9 @@ from collections import Counter
 import streamlit as st
 from streamlit_geolocation import streamlit_geolocation
 
+if "upload_key" not in st.session_state:
+    st.session_state.upload_key = 0
+
 # --------------------------------------------------
 # Project paths
 # --------------------------------------------------
@@ -53,6 +56,8 @@ st.caption(
 
 st.divider()
 
+def reset_upload():
+    st.session_state.upload_key += 1
 
 # --------------------------------------------------
 # Upload section
@@ -70,14 +75,9 @@ st.write(
 
 uploaded_file = st.file_uploader(
     "Drag & drop a road image here or click Browse",
-    type=[
-        "jpg",
-        "jpeg",
-        "png"
-    ],
-    help=(
-        "Supported formats: JPG, JPEG and PNG"
-    )
+    type=["jpg", "jpeg", "png"],
+    help="Supported formats: JPG, JPEG and PNG",
+    key=f"road_image_uploader_{st.session_state.upload_key}"
 )
 
 
@@ -602,11 +602,10 @@ if uploaded_file:
             st.download_button(
                 label="📄 Download Inspection Report",
                 data=pdf_bytes,
-                file_name=(
-                    f"{report['report_number']}.pdf"
-                ),
+                file_name=f"{report['report_number']}.pdf",
                 mime="application/pdf",
-                use_container_width=True
+                use_container_width=True,
+                on_click=reset_upload
             )
 
         except Exception as e:

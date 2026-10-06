@@ -193,10 +193,19 @@ class Database:
 
     def get_next_report_number(self):
 
-        return (
-            self.collection.count_documents({})
-            + 1
+        latest_report = self.collection.find_one(
+            {"report_number": {"$exists": True}},
+            sort=[("report_number", -1)]
         )
+
+        if not latest_report:
+            return 1
+
+        latest_number = int(
+            latest_report["report_number"].replace("REP-", "")
+        )
+
+        return latest_number + 1
 
 
     # --------------------------------------------------

@@ -14,13 +14,40 @@ DAMAGE_WEIGHTS = {
 }
 
 
+# --------------------------------------------------
+# Additional severity multipliers
+# --------------------------------------------------
+
+DAMAGE_MULTIPLIERS = {
+    "pothole": 1.15,
+    "alligator crack": 1.15,
+    "transverse crack": 1.00,
+    "longitudinal crack": 1.00,
+    "other corruption": 0.80,
+}
+
+
+def normalize_damage_name(damage_type):
+    """
+    Convert damage names into a consistent format.
+    """
+
+    return (
+        damage_type
+        .replace("_", " ")
+        .strip()
+        .lower()
+    )
+
+
 def assess_damage(detection_result):
     """
     Analyze YOLO detections and produce a consistent
     preliminary road-condition assessment.
 
-    The assessment is a heuristic and is NOT an
-    engineering severity standard.
+    This is a heuristic assessment based only on
+    visible detections. It is NOT an engineering
+    severity standard.
     """
 
     detections = detection_result.get(
@@ -37,14 +64,24 @@ def assess_damage(detection_result):
     if total_damages == 0:
 
         return {
+
             "severity_score": 0,
+
             "road_condition": "Good",
+
             "risk_level": "Low",
+
             "maintenance_priority": "Low",
+
             "repair_category": "No Repair",
+
             "damage_counts": {},
+
             "average_confidence": 0.0,
-            "assessment_basis": "No visible damage detected."
+
+            "assessment_basis":
+                "No visible damage detected."
+
         }
 
     # --------------------------------------------------
@@ -52,9 +89,9 @@ def assess_damage(detection_result):
     # --------------------------------------------------
 
     damage_names = [
-        d["damage_type"]
-        .replace("_", " ")
-        .lower()
+        normalize_damage_name(
+            d["damage_type"]
+        )
         for d in detections
     ]
 
@@ -75,29 +112,83 @@ def assess_damage(detection_result):
     )
 
     # --------------------------------------------------
-    # Confidence-weighted severity
+    # Base severity
     # --------------------------------------------------
 
     severity_score = 0.0
 
     for detection in detections:
 
-        damage_type = (
+        damage_type = normalize_damage_name(
             detection["damage_type"]
-            .replace("_", " ")
-            .lower()
         )
 
-        confidence = detection["confidence"]
+        confidence = float(
+            detection["confidence"]
+        )
 
         weight = DAMAGE_WEIGHTS.get(
             damage_type,
             1
         )
 
-        severity_score += (
-            weight * confidence
+        multiplier = DAMAGE_MULTIPLIERS.get(
+            damage_type,
+            1.0
         )
+
+        contribution = (
+            weight
+            * confidence
+            * multiplier
+        )
+
+        severity_score += contribution
+
+    # --------------------------------------------------
+    # Repeated-damage factor
+    #
+    # Multiple visible defects should increase
+    # maintenance concern, but not linearly forever.
+    # --------------------------------------------------
+
+    if total_damages >= 2:
+
+        additional_damage_factor = min(
+            1.0 + (
+                0.10
+                * (total_damages - 1)
+            ),
+            1.50
+        )
+
+        severity_score *= (
+            additional_damage_factor
+        )
+
+    # --------------------------------------------------
+    # Multiple severe damage types
+    # --------------------------------------------------
+
+    severe_damage_types = {
+        "pothole",
+        "alligator crack"
+    }
+
+    severe_damage_count = sum(
+        count
+        for damage_type, count
+        in damage_counts.items()
+        if damage_type in severe_damage_types
+    )
+
+    if severe_damage_count >= 2:
+
+        severity_score *= 1.10
+
+    # --------------------------------------------------
+    # Round final score
+    # --------------------------------------------------
 
     severity_score = round(
         severity_score,
@@ -112,7 +203,7 @@ def assess_damage(detection_result):
 
         road_condition = "Good"
 
-    elif severity_score <= 3.5:
+    elif severity_score < 4.0:
 
         road_condition = "Moderate"
 
@@ -128,7 +219,7 @@ def assess_damage(detection_result):
 
         risk_level = "Low"
 
-    elif severity_score <= 3.5:
+    elif severity_score < 4.0:
 
         risk_level = "Medium"
 
@@ -138,17 +229,19 @@ def assess_damage(detection_result):
 
     # --------------------------------------------------
     # Maintenance priority
+    #
+    # Immediate starts at 4.0 as requested.
     # --------------------------------------------------
 
     if severity_score <= 1.5:
 
         maintenance_priority = "Low"
 
-    elif severity_score <= 2.5:
+    elif severity_score < 2.5:
 
         maintenance_priority = "Medium"
 
-    elif severity_score <= 4.5:
+    elif severity_score < 4.0:
 
         maintenance_priority = "High"
 
@@ -164,11 +257,11 @@ def assess_damage(detection_result):
 
         repair_category = "Routine"
 
-    elif severity_score <= 3.5:
+    elif severity_score < 4.0:
 
         repair_category = "Minor"
 
-    elif severity_score <= 5.0:
+    elif severity_score <= 6.0:
 
         repair_category = "Major"
 
@@ -177,7 +270,7 @@ def assess_damage(detection_result):
         repair_category = "Urgent"
 
     # --------------------------------------------------
-    # Human-readable basis
+    # Human-readable assessment basis
     # --------------------------------------------------
 
     damage_summary = ", ".join(
@@ -187,7 +280,8 @@ def assess_damage(detection_result):
     )
 
     assessment_basis = (
-        f"{damage_summary} detected."
+        f"{damage_summary} detected. "
+        f"Severity score: {severity_score}."
     )
 
     # --------------------------------------------------
@@ -195,15 +289,32 @@ def assess_damage(detection_result):
     # --------------------------------------------------
 
     return {
-        "severity_score": severity_score,
-        "road_condition": road_condition,
-        "risk_level": risk_level,
-        "maintenance_priority": maintenance_priority,
-        "repair_category": repair_category,
-        "damage_counts": dict(damage_counts),
-        "average_confidence": round(
-            average_confidence,
-            4
-        ),
-        "assessment_basis": assessment_basis
+
+        "severity_score":
+            severity_score,
+
+        "road_condition":
+            road_condition,
+
+        "risk_level":
+            risk_level,
+
+        "maintenance_priority":
+            maintenance_priority,
+
+        "repair_category":
+            repair_category,
+
+        "damage_counts":
+            dict(damage_counts),
+
+        "average_confidence":
+            round(
+                average_confidence,
+                4
+            ),
+
+        "assessment_basis":
+            assessment_basis
+
     }

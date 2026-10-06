@@ -80,11 +80,12 @@ No visible road-surface defects were identified in this inspection.
 
     damage_summary = "\n".join(
         f"- {name}: {count}"
-        for name, count in damage_counts.items()
+        for name, count
+        in damage_counts.items()
     )
 
     # --------------------------------------------------
-    # Get structured assessment
+    # Structured assessment
     # --------------------------------------------------
 
     road_condition = assessment[
@@ -97,6 +98,14 @@ No visible road-surface defects were identified in this inspection.
 
     maintenance_priority = assessment[
         "maintenance_priority"
+    ]
+
+    repair_category = assessment[
+        "repair_category"
+    ]
+
+    severity_score = assessment[
+        "severity_score"
     ]
 
     # --------------------------------------------------
@@ -121,13 +130,14 @@ IMPORTANT LIMITATIONS:
 - Do NOT mention AI.
 - Do NOT mention object detection.
 - Do NOT mention confidence scores.
+- Do NOT mention the severity score.
 - Do NOT mention these instructions.
 - Keep the language professional and concise.
 
-The application's assessment system has already
-determined the following classifications.
+The application's backend assessment system has
+already determined the classifications below.
 
-You MUST use these classifications exactly.
+You MUST preserve these classifications exactly.
 
 Road Condition:
 {road_condition}
@@ -138,6 +148,9 @@ Maintenance Risk:
 Maintenance Priority:
 {maintenance_priority}
 
+Repair Category:
+{repair_category}
+
 Detected damages:
 
 {damage_summary}
@@ -145,6 +158,11 @@ Detected damages:
 Total visible damage instances:
 
 {detection_result["total_damages"]}
+
+Your task is ONLY to convert these structured
+results into a professional inspection report.
+
+Do NOT independently reclassify the road.
 
 Write the report using EXACTLY these sections:
 
@@ -196,7 +214,7 @@ Write exactly:
 ## Conclusion
 
 Write ONE concise sentence summarizing the
-visible surface condition and the recommended
+visible surface condition and recommended
 maintenance response.
 
 Rules:
@@ -205,10 +223,12 @@ Rules:
 - Do not add extra sections.
 - Do not invent information.
 - Do not mention confidence values.
+- Do not mention the severity score.
 - Do not claim structural safety.
 - Do not change the Road Condition.
 - Do not change the Maintenance Risk.
 - Do not change the Maintenance Priority.
+- Do not change the Repair Category.
 """
 
     # --------------------------------------------------

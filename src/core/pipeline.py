@@ -9,6 +9,10 @@ class Pipeline:
 
     def __init__(self):
 
+        # --------------------------------------------------
+        # Initialize detector
+        # --------------------------------------------------
+
         self.detector = Detector(
             MODEL_PATH
         )
@@ -19,8 +23,10 @@ class Pipeline:
         # Step 1: Detect visible road damage
         # --------------------------------------------------
 
-        detection_result = self.detector.detect(
-            image_path
+        detection_result = (
+            self.detector.detect(
+                image_path
+            )
         )
 
         # --------------------------------------------------
@@ -32,10 +38,12 @@ class Pipeline:
         )
 
         # --------------------------------------------------
-        # Step 3: Store assessment in result
+        # Step 3: Attach assessment
         # --------------------------------------------------
 
-        detection_result["assessment"] = assessment
+        detection_result[
+            "assessment"
+        ] = assessment
 
         # --------------------------------------------------
         # Step 4: Generate professional report
@@ -47,9 +55,15 @@ class Pipeline:
         )
 
         # --------------------------------------------------
-        # Step 5: Store AI report
+        # Step 5: Attach AI report
         # --------------------------------------------------
 
-        detection_result["ai_report"] = ai_report
+        detection_result[
+            "ai_report"
+        ] = ai_report
+
+        # --------------------------------------------------
+        # Return complete result
+        # --------------------------------------------------
 
         return detection_result

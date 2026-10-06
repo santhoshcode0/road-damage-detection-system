@@ -69,8 +69,8 @@ if not reports:
 
 st.subheader("🔎 Search & Filter")
 
-filter_col1, filter_col2, filter_col3 = st.columns(
-    [2, 1, 1],
+filter_col1, filter_col2, filter_col3, filter_col4 = st.columns(
+    [2, 1, 1, 1],
     gap="medium"
 )
 
@@ -118,6 +118,24 @@ with filter_col3:
 
 
 # --------------------------------------------------
+# Maintenance Priority filter
+# --------------------------------------------------
+
+with filter_col4:
+
+    priority_filter = st.selectbox(
+        "Maintenance Priority",
+        [
+            "All",
+            "Low",
+            "Medium",
+            "High",
+            "Immediate"
+        ]
+    )
+
+
+# --------------------------------------------------
 # Filter reports
 # --------------------------------------------------
 
@@ -139,6 +157,16 @@ for report in reports:
         "status",
         "Unknown"
     )
+    assessment = report.get(
+        "assessment",
+        {}
+    )
+
+    maintenance_priority = assessment.get(
+        "maintenance_priority",
+        ""
+    )
+
 
     # ----------------------------------------------
     # Search filter
@@ -156,6 +184,15 @@ for report in reports:
     if status_filter != "All":
 
         if status != status_filter:
+            continue
+
+    # ----------------------------------------------
+    # Maintenance Priority filter
+    # ----------------------------------------------
+
+    if priority_filter != "All":
+
+        if maintenance_priority != priority_filter:
             continue
 
     # ----------------------------------------------
