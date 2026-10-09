@@ -107,6 +107,3 @@ data/RDD_SPLIT/
 
 .agents/
 .claude/
-
-# Local experimental file
-ui/Santhosh.py
