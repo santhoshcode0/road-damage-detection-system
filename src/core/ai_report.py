@@ -1,4 +1,5 @@
 import os
+import time
 from collections import Counter
 
 from dotenv import load_dotenv
@@ -232,12 +233,46 @@ Rules:
 """
 
     # --------------------------------------------------
-    # Generate report
+    # Generate report with retry handling
     # --------------------------------------------------
 
-    response = client.models.generate_content(
-        model="gemini-3.5-flash",
-        contents=prompt,
-    )
+    model_name = "gemini-3.5-flash-lite"
 
-    return response.text
+    max_attempts = 4
+
+    for attempt in range(max_attempts):
+
+        try:
+
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt,
+            )
+
+            return response.text
+
+        except Exception as e:
+
+            error_message = str(e)
+
+            # Retry only temporary server/service errors
+            if (
+                "503" not in error_message
+                and "UNAVAILABLE" not in error_message
+                and "429" not in error_message
+            ):
+                raise
+
+            # Last attempt failed
+            if attempt == max_attempts - 1:
+                raise
+
+            # Exponential backoff:
+            # 2s → 4s → 8s
+            wait_time = 2 ** (attempt + 1)
+
+            time.sleep(wait_time)
+
+    raise RuntimeError(
+        "Gemini report generation failed."
+    )

@@ -38,7 +38,7 @@ ENV/
 # YOLO / Training Outputs
 # ==========================================
 
-runs/*
+runs/
 !runs/detect/
 !runs/detect/models/
 !runs/detect/models/production/
@@ -107,3 +107,6 @@ data/RDD_SPLIT/
 
 .agents/
 .claude/
+
+# Local experimental file
+ui/Santhosh.py

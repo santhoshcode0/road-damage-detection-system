@@ -240,26 +240,39 @@ if uploaded_file:
             "Address (optional)",
             placeholder="e.g. Bengaluru, Karnataka"
         )
+    
     latitude = None
     longitude = None
+    location_captured = False
 
-    if location:
+    if isinstance(location, dict):
+        latitude = location.get("latitude")
+        longitude = location.get("longitude")
 
-        latitude = location.get(
-            "latitude"
-        )
+    if latitude is not None and longitude is not None:
+        try:
+            latitude = float(latitude)
+            longitude = float(longitude)
 
-        longitude = location.get(
-            "longitude"
-        )
-
-        if latitude is not None and longitude is not None:
-
-            st.success(
-                f"Location captured: "
-                f"{latitude:.6f}, "
-                f"{longitude:.6f}"
+            location_captured = (
+                -90 <= latitude <= 90
+                and -180 <= longitude <= 180
             )
+        except (TypeError, ValueError):
+            location_captured = False
+
+    if location_captured:
+        st.success(
+            f"Location captured: "
+            f"{latitude:.6f}, "
+            f"{longitude:.6f}"
+        )
+    else:
+        st.warning(
+            "Location access is required before analyzing "
+            "the road image. Use the location access control "
+            "above and allow your browser to share your location."
+        )
 
     # --------------------------------------------------
     # Analyze button
@@ -276,7 +289,8 @@ if uploaded_file:
         analyze_button = st.button(
             "🔍 Analyze Road Damage",
             use_container_width=True,
-            type="primary"
+            type="primary",
+            disabled=not location_captured
         )
 
 
@@ -285,7 +299,12 @@ if uploaded_file:
     # --------------------------------------------------
 
     if analyze_button:
-
+        if not location_captured:
+            st.error(
+                "Inspection blocked: location access "
+                "is required before analysis."
+            )
+            st.stop()
         try:
 
             with st.spinner(
